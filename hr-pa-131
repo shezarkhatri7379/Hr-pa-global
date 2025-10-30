@@ -1,1 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:batch="http://www.mulesoft.org/schema/mule/batch"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="0feb3f96-da8b-4672-b0a4-bcdb7c2aebaf" >
+		<http:listener-connection protocol="HTTPS" host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="620631d4-0b47-4b33-8019-a62f300366de" basePath="/new" />
+	<flow name="hr-pa-131Flow" doc:id="b9693345-c3b2-4195-a232-cd442c7218ca" >
+		<http:listener doc:name="Listener" doc:id="580632e4-e9b6-4d32-a028-a5d71d37b189" config-ref="HTTP_Listener_config" path="/pa131"/>
+		<logger level="INFO" doc:name="Start Logger" doc:id="3372be19-f75c-4700-858e-86597dc953e5" />
+		<ee:transform doc:name="Transform Message" doc:id="afb30726-2847-4da0-9075-faaa2e0ec6b0" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[																																																																														%dw 2.0
+output application/xml
+ns ns0 http://tempuri.org/
+---  fn                                                                                                o
+
+{
+	ns0#Multiply: {
+		ns0#intA: attributes.queryParams.int1,
+		ns0#intB: attributes.queryParams.int2
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="hr-pa-131Flow6" doc:id="fa9d93c9-0ddf-4ca5-88c1-f9f2f55ae739" >
+		<choice doc:name="Choice" doc:id="17cd467b-9f17-4ad0-af17-878745e589bf" >
+			<when />
+		</choice>
+	</flow>
+	<flow name="hr-pa-131Flow5" doc:id="5318caf3-b8d9-47ff-8d14-89103b291edc" >
+		<idempotent-message-validator doc:name="Idempotent Message Validator" doc:id="ee99249e-d9b1-4709-88d8-3c8332c347ad" />
+	</flow>
+	<flow name="hr-pa-131Flow4" doc:id="c2ffb018-b968-44fe-9b8c-d09e3c746054" >
+		<salesforce:abort-job doc:name="Abort job" doc:id="b200a621-3b40-4d2a-bc83-71cf0c0f88d9" />
+	</flow>
+	<flow name="hr-pa-131Flow3" doc:id="4feae76b-d276-406e-97b4-3beb2e26f50f" >
+		<batch:job jobName="hr-pa-131Batch_Job" doc:id="9fea4cd4-37c2-4e73-a0ec-baf6ac4a1157" >
+			<batch:process-records >
+				<batch:step name="Batch_Step" doc:id="0fddf439-d59b-4c51-8442-904416cd72b3" />
+			</batch:process-records>
+		</batch:job>
+	</flow>
+	<flow name="hr-pa-131Flow7" doc:id="2d752ea6-cf92-4c4b-b604-cd6611b2de1c" >
+		<flow-ref doc:name="Flow Reference" doc:id="1139a348-84d1-4d2c-874d-09c86c74bfcb" />
+	</flow>
+	<flow name="hr-pa-131Flow2" doc:id="cae423ba-9be6-4b05-8f9d-28ee0f6d1f13" >
+		<scatter-gather doc:name="Scatter-Gather" doc:id="ce31dbcb-4475-4c40-905a-52f992fa8fb4" />
+	</flow>
+	<flow name="hr-pa-131Flow1" doc:id="185ff5d5-a1cb-4881-ae51-e9d973ae23b4" >
+	
+	</flow>
+</mule>
 
